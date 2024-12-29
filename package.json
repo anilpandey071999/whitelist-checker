@@ -1,6 +1,7 @@
 {
   "name": "whitelist-checker",
   "version": "0.1.0",
+  "homepage": "https://github.com/anilpandey071999/whitelist-checker",
   "private": true,
   "dependencies": {
     "cra-template": "1.2.0",
