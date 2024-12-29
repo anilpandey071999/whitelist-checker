@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/anilpandey071999/whitelist-checker/static/css/main.e6c13ad2.css",
+    "main.js": "/anilpandey071999/whitelist-checker/static/js/main.53dfeef1.js",
+    "static/js/563.fcd2b741.chunk.js": "/anilpandey071999/whitelist-checker/static/js/563.fcd2b741.chunk.js",
+    "index.html": "/anilpandey071999/whitelist-checker/index.html",
+    "main.e6c13ad2.css.map": "/anilpandey071999/whitelist-checker/static/css/main.e6c13ad2.css.map",
+    "main.53dfeef1.js.map": "/anilpandey071999/whitelist-checker/static/js/main.53dfeef1.js.map",
+    "563.fcd2b741.chunk.js.map": "/anilpandey071999/whitelist-checker/static/js/563.fcd2b741.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e6c13ad2.css",
+    "static/js/main.53dfeef1.js"
+  ]
+}
