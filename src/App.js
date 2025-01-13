@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import whitelist from "./whitelist.json"; // Import the default export
+import logo from './logo.png';
 
 const whitelistedAddresses = whitelist.whitelistedAddresses; // Access property
 const OGAddresses = whitelist.OGAddresses;
@@ -9,22 +10,20 @@ export default function WhitelistChecker() {
   const [isWhitelisted, setIsWhitelisted] = useState(null); // State for whitelist result
   const [isOG, setIsOG] = useState(false); // State to check if address is in OG list
   const [loading, setLoading] = useState(false); // State for loading indicator
+  const [isHovered, setIsHovered] = useState(false); // State for hover animation
 
-  // Handle user input change
   const handleInputChange = (event) => {
     setInputAddress(event.target.value);
   };
 
-  // Check if the entered address is whitelisted or in OG list
   const checkWhitelistHandler = () => {
     if (!whitelistedAddresses || !OGAddresses) return;
 
-    setLoading(true); // Show loading indicator during processing
-    setIsWhitelisted(null); // Reset previous result
-    setIsOG(false); // Reset OG state
+    setLoading(true);
+    setIsWhitelisted(null);
+    setIsOG(false);
 
     setTimeout(() => {
-      // Normalize addresses for comparison
       const normalizedWhitelist = whitelistedAddresses.map((addr) =>
         addr.trim().toLowerCase()
       );
@@ -33,25 +32,32 @@ export default function WhitelistChecker() {
       );
       const normalizedInput = inputAddress.trim().toLowerCase();
 
-      console.log(normalizedWhitelist, normalizedInput);
-
       if (normalizedOGList.includes(normalizedInput)) {
         setIsWhitelisted(true);
-        setIsOG(true); // Mark as OG address
+        setIsOG(true);
       } else if (normalizedWhitelist.includes(normalizedInput)) {
         setIsWhitelisted(true);
-        setIsOG(false); // Mark as regular whitelist address
+        setIsOG(false);
       } else {
         setIsWhitelisted(false);
       }
 
-      setLoading(false); // Hide loading indicator after checking
-    }, 1000); // Simulated delay for better UX
+      setLoading(false);
+    }, 1000);
+  };
+
+  const redirectToHome = () => {
+    window.location.href = "https://kongonape.com/"; // Redirect to home page
   };
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.title}>Whitelist Checker</h1>
+      {/* Logo */}
+      <img src={logo} alt="Logo" style={styles.logo} />
+
+      {/* Back to Home Button */}
+
+      <h1 style={styles.title}>Are you  eligible for the Whitelist or OG spots?</h1>
 
       <div style={styles.form}>
         <label htmlFor="walletAddress" style={styles.label}>
@@ -65,21 +71,31 @@ export default function WhitelistChecker() {
           placeholder="0x1234..."
           style={styles.input}
         />
-        <button onClick={checkWhitelistHandler} style={styles.button} disabled={loading}>
+        <button
+          onClick={checkWhitelistHandler}
+          style={{
+            ...styles.button,
+            ...(isHovered ? styles.buttonHover : {}),
+          }}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          disabled={loading}
+        >
           {loading ? "Checking..." : "Check Whitelist"}
         </button>
+
       </div>
 
       {/* Display result after checking */}
-      {isWhitelisted !== null && !loading && (
+      {isWhitelisted !== null && !loading ? (
         <div style={styles.result}>
           {isWhitelisted ? (
             isOG ? (
               <p style={{ ...styles.message, color: "purple" }}>
-                🎉 The address is in the **OG List**! You have special privileges!
+                🎉 The address is in the OG List! You have special privileges!
               </p>
             ) : (
-              <p style={{ ...styles.message, color: "green" }}>
+              <p style={{ ...styles.message, color: "#5CB338" }}>
                 ✅ The address is whitelisted!
               </p>
             )
@@ -89,61 +105,97 @@ export default function WhitelistChecker() {
             </p>
           )}
         </div>
+      ) : (
+        // Placeholder to maintain layout
+        <div style={styles.resultPlaceholder}>
+          {/* Invisible placeholder */}
+          <p style={{ visibility: "hidden" }}>❌ The address is not whitelisted.</p>
+        </div>
       )}
+
+      <button
+        onClick={redirectToHome}
+        style={styles.button}
+      >
+        Back to Home
+      </button>
+
     </div>
+
   );
 }
 
 const styles = {
   container: {
-    fontFamily: "Arial, sans-serif",
+    fontFamily: "'Stalinist One', sans-serif",
     textAlign: "center",
-    marginTop: "50px",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    minHeight: "100vh",
+    backgroundColor: "#000", // Black background
+    color: "#FFFFFF", // White text color
     padding: "20px",
-    borderRadius: "10px",
-    backgroundColor: "#f9f9f9",
-    maxWidth: "500px",
-    marginLeft: "auto",
-    marginRight: "auto",
-    boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+  },
+  logo: {
+    width: "150px", // Adjust size of the logo
+    height: "auto",
+    marginBottom: "20px", // Add space below the logo
   },
   title: {
-    fontSize: "24px",
+    fontSize: "clamp(36px, 6vw, 60px)", // Responsive title size
     fontWeight: "bold",
-    marginBottom: "20px",
-    color: "#333",
+    marginBottom: "20px", // Space below title
+    color: "#FFFFFF", // White title text
   },
   form: {
-    marginBottom: "20px",
+    backgroundColor: "#111", // Slightly lighter black for contrast
+    padding: "20px",
+    borderRadius: "10px",
+    boxShadow: "0px 4px 6px rgba(255, 255, 255, 0.1)", // Subtle shadow
+    maxWidth: "400px", // Restrict width for better alignment
+    width: "100%",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    gap: "15px", // Space between form elements
   },
   label: {
-    display: "block",
-    fontSize: "16px",
-    marginBottom: "10px",
-    color: "#555",
+    fontSize: "clamp(18px, 3vw, 20px)", // Responsive label size
+    color: "#FFFFFF", // White label text
   },
   input: {
     width: "100%",
     padding: "10px",
-    fontSize: "16px",
+    fontSize: "18px", // Larger input text size for readability
     borderRadius: "5px",
-    border: "1px solid #ccc",
-    marginBottom: "15px",
+    borderColor: "#ccc", // Light gray border for input field
   },
   button: {
     padding: "10px 20px",
-    fontSize: "16px",
+    fontSize: "16px", // Button text size
     borderRadius: "5px",
-    border: "none",
-    backgroundColor: "#007BFF",
-    color: "#fff",
-    cursor: "pointer",
-  },
-  result: {
-    marginTop: "20px",
+    borderColor: "#5CB338",
+    backgroundColor: "#5CB338"
+
   },
   message: {
-    fontSize: "18px",
-    fontWeight: "bold",
+    fontSize: "clamp(18px, 2.5vw, 24px)", // Responsive font size
+    fontWeight: "bold", // Make the message bold for emphasis
+    marginTop: "20px", // Add space above the message
+    textAlign: "center", // Center-align the text
+    color: "#FFFFFF", // Default white color (can be overridden dynamically)
   },
 };
+
+// Add media queries for finer control over layout on smaller screens
+const responsiveStyles = `
+@media (max-width: 768px) {
+  .form {
+      padding: 15px;
+      gap: 10px;
+      box-shadow:none; /* Simplify design for smaller screens */
+   }
+}
+`;
